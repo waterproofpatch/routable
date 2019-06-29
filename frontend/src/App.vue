@@ -14,7 +14,7 @@ export default {
   },
   methods: {
     update: function() {
-      Vue.axios.get('/api/update').then((response) => {
+      this.axios.get('/api/update').then((response) => {
           console.log(response.data)
       })
     }
