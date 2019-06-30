@@ -1,7 +1,8 @@
 <template>
-  <div id="app">
-    Welcome.
-    <b-button v-on:click="update">Update</b-button>
+  <div class="container" id="app">
+    <b-input placeholder="Host Name/IP" v-model="hostname" type="text"></b-input>
+    <b-button v-on:click="checkHost">Check</b-button>
+    <p>Host up: {{host_up}}</p>
   </div>
 </template>
 
@@ -10,6 +11,8 @@ export default {
   name: 'app',
   data () {
     return {
+      hostname: "",
+      host_up: false,
     }
   },
   methods: {
@@ -17,9 +20,20 @@ export default {
       this.axios.get('/api/update').then((response) => {
           console.log(response.data)
       })
+    },
+    checkHost: function(hostname) {
+      this.host_up = "Checking..."
+      this.axios.get('/api/check_host', { 
+          params: {
+            'hostname': this.hostname
+          } 
+      }).then((response) => {
+          this.host_up=response.data.up
+      }).catch((error) => {
+        this.host_up = "Failed getting status with " + error
+      })
     }
   }
-
 }
 </script>
 
