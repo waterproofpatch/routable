@@ -1,8 +1,13 @@
 <template>
   <div class="container" id="app">
-    <b-input placeholder="Host Name/IP" v-model="hostname" type="text"></b-input>
-    <b-button v-on:click="checkHost">Check</b-button>
-    <p>Host up: {{host_up}}</p>
+    <b-input value="8.8.8.8" placeholder="Host Name/IP" v-model="newHostname" type="text"></b-input>
+    <b-button v-on:click="updateHosts">Add</b-button>
+
+    <b-list-group> 
+      <b-list-group-item v-bind:key="host.hostname" v-for="(host, i) in hosts">Host: {{host.hostname}} Up: {{host.up}} <b-button v-on:click="checkHostAtIndex(i)">Refresh</b-button></b-list-group-item>
+    </b-list-group>
+  <li
+
   </div>
 </template>
 
@@ -11,26 +16,35 @@ export default {
   name: 'app',
   data () {
     return {
-      hostname: "",
-      host_up: false,
+      newHostname: "",
+      hosts: []
     }
   },
   methods: {
-    update: function() {
-      this.axios.get('/api/update').then((response) => {
-          console.log(response.data)
+    updateHosts: function() {
+      console.log('updating...')
+      this.hosts.push({'hostname': this.newHostname, 'up': false})
+      console.log(this.hosts)
+    },
+    checkHostAtIndex: function(index) {
+      this.axios.get('/api/check_host_at_index', { 
+          params: {
+            'hostname': this.hosts[index].hostname
+          } 
+      }).then((response) => {
+        this.hosts[index].up = response.data.up
+      }).catch((error) => {
       })
     },
     checkHost: function(hostname) {
-      this.host_up = "Checking..."
       this.axios.get('/api/check_host', { 
           params: {
             'hostname': this.hostname
           } 
       }).then((response) => {
-          this.host_up=response.data.up
+        this.hosts[this.hostname]=response.data.up
       }).catch((error) => {
-        this.host_up = "Failed getting status with " + error
+        console.log(error)
       })
     }
   }
