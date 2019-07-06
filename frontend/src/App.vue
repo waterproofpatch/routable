@@ -4,10 +4,8 @@
     <b-button v-on:click="updateHosts">Add</b-button>
 
     <b-list-group> 
-      <b-list-group-item v-bind:key="host.hostname" v-for="(host, i) in hosts">Host: {{host.hostname}} Up: {{host.up}} <b-button v-on:click="checkHostAtIndex(i)">Refresh</b-button></b-list-group-item>
+      <b-list-group-item v-bind:key="host.hostname" v-for="(host, i) in hosts">Host: {{host.hostname}} Up: {{host.up}} <b-button v-on:click="checkHostAtIndex(i)">Refresh</b-button><b-button v-on:click="hosts.splice(i, 1)">Remove</b-button></b-list-group-item>
     </b-list-group>
-  <li
-
   </div>
 </template>
 
