@@ -36,6 +36,7 @@ export default {
       this.checkHostAtIndex(this.hosts.length - 1)
     },
     checkHostAtIndex: function(index) {
+      this.hosts[index].up = 'Checking...'
       this.axios.get('/api/check_host', { 
         params: {
           'hostname': this.hosts[index].hostname
