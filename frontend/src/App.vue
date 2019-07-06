@@ -1,10 +1,22 @@
 <template>
   <div class="container" id="app">
-    <b-input value="8.8.8.8" placeholder="Host Name/IP" v-model="newHostname" type="text"></b-input>
-    <b-button v-on:click="updateHosts">Add</b-button>
+    <b-input-group prepend="Username" class="mt-3">
+      <b-form-input placeholder="Host Name/IP" v-model="newHostname"></b-form-input>
+      <b-input-group-append>
+        <b-button variant="outline-success" v-on:click="updateHosts">Add</b-button>
+      </b-input-group-append>
+    </b-input-group>
 
     <b-list-group> 
-      <b-list-group-item v-bind:key="host.hostname" v-for="(host, i) in hosts">Host: {{host.hostname}} Up: {{host.up}} <b-button v-on:click="checkHostAtIndex(i)">Refresh</b-button><b-button v-on:click="hosts.splice(i, 1)">Remove</b-button></b-list-group-item>
+      <b-list-group-item v-bind:key="host.hostname" v-for="(host, i) in hosts">
+        Host: {{host.hostname}} Up: {{host.up}} 
+        <b-button v-on:click="checkHostAtIndex(i)">
+          Refresh
+        </b-button>
+        <b-button v-on:click="hosts.splice(i, 1)">
+          Remove
+        </b-button>
+      </b-list-group-item>
     </b-list-group>
   </div>
 </template>
@@ -20,29 +32,17 @@ export default {
   },
   methods: {
     updateHosts: function() {
-      console.log('updating...')
       this.hosts.push({'hostname': this.newHostname, 'up': false})
-      console.log(this.hosts)
+      this.checkHostAtIndex(this.hosts.length - 1)
     },
     checkHostAtIndex: function(index) {
-      this.axios.get('/api/check_host_at_index', { 
-          params: {
-            'hostname': this.hosts[index].hostname
-          } 
+      this.axios.get('/api/check_host', { 
+        params: {
+          'hostname': this.hosts[index].hostname
+        } 
       }).then((response) => {
         this.hosts[index].up = response.data.up
       }).catch((error) => {
-      })
-    },
-    checkHost: function(hostname) {
-      this.axios.get('/api/check_host', { 
-          params: {
-            'hostname': this.hostname
-          } 
-      }).then((response) => {
-        this.hosts[this.hostname]=response.data.up
-      }).catch((error) => {
-        console.log(error)
       })
     }
   }
