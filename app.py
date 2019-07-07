@@ -14,7 +14,7 @@ APP = Flask(__name__)
 @APP.route('/api/check_host')
 def check_host():
     """
-    Index page
+    Check a host specified by IP to see if we can resolve it.
     """
     if 'hostname' not in request.args:
         return jsonify({'error': 'missing hostname'}), 400
