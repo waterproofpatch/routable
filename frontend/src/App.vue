@@ -30,6 +30,12 @@ export default {
       hosts: []
     }
   },
+  mounted: function () {
+    this.axios.get('api/hosts').then((response) => {
+      this.hosts = response.data.hosts
+    }).catch((error) => {
+    })
+  },
   methods: {
     updateHosts: function() {
       this.hosts.push({'hostname': this.newHostname, 'up': false})
