@@ -3,8 +3,10 @@ import validators
 
 def is_valid(hostname):
     """
-    TODO implement this
+    Check if a hostname is a valid IP address
     """
+    if hostname is None or len(hostname) == 0:
+        return False
     return validators.ipv4(hostname)
 
 def is_up(hostname):
