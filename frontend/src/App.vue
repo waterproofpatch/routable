@@ -13,7 +13,7 @@
         <b-button v-on:click="checkHostAtIndex(i)">
           Refresh
         </b-button>
-        <b-button v-on:click="hosts.splice(i, 1)">
+        <b-button v-on:click="removeHostAtIndex(i)">
           Remove
         </b-button>
       </b-list-group-item>
@@ -37,19 +37,25 @@ export default {
     })
   },
   methods: {
+    removeHostAtIndex: function(index) {
+      this.axios.delete('/api/hosts?hostname='+this.hosts[index].hostname
+      ).then((response) => {
+        this.hosts.splice(index, 1)
+      }).catch((error) => {
+      })
+    },
     updateHosts: function() {
       this.hosts.push({'hostname': this.newHostname, 'up': false})
       this.checkHostAtIndex(this.hosts.length - 1)
     },
     checkHostAtIndex: function(index) {
       this.hosts[index].up = 'Checking...'
-      this.axios.get('/api/check_host', { 
-        params: {
-          'hostname': this.hosts[index].hostname
-        } 
+      this.axios.post('/api/hosts', { 
+        'hostname': this.hosts[index].hostname
       }).then((response) => {
         this.hosts[index].up = response.data.up
       }).catch((error) => {
+        this.hosts[index].up = "Error..."
       })
     }
   }
