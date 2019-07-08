@@ -40,9 +40,9 @@ export default {
     removeHostAtIndex: function(index) {
       this.axios.delete('/api/hosts?hostname='+this.hosts[index].hostname
       ).then((response) => {
-        this.hosts.splice(index, 1)
       }).catch((error) => {
       })
+      this.hosts.splice(index, 1)
     },
     updateHosts: function() {
       this.hosts.push({'hostname': this.newHostname, 'up': false})
