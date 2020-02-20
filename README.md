@@ -13,7 +13,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-1. Start the frontend:
+2. Start the frontend:
 
 ```bash
 cd frontend
